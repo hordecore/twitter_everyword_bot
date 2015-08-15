@@ -1,21 +1,26 @@
 #!/bin/bash
 
-set -eux
+set -eu
+
+MAINDIR=/opt/softdriven
+DICT=$MAINDIR/nouns
+LAST_LINE_FILE=$MAINDIR/last_line
 
 create_new_list() {
-	if [ -f /opt/softdriven/last_line ]; then
-		read line < /opt/softdriven/last_line
-		grep -A 10000 -w "$line" /opt/softdriven/nouns | grep -vw "$line"
+	if [ ! -f $LAST_LINE_FILE ]; then
+		cat $DICT
 		return 0
 	fi
-	cat /opt/softdriven/nouns
+	read line < $LAST_LINE_FILE
+	grep -A 10000 -w "$line" $DICT | grep -vw "$line"
+	
 }
 
 main_loop() {
 	while read line; do	
 		software_driven_tweet "Software driven $line"
-		echo $(date) $line >> /opt/softdriven/log
-		echo $line > /opt/softdriven/last_line
+		echo $(date) $line >> $MAINDIR/log
+		echo $line > $LAST_LINE_FILE
 		sleep $((30*60))
 	done
 }
