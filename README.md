@@ -8,4 +8,8 @@
   
     MAINDIR=/opt/softdriven/
     git clone https://github.com/hordecore/twitter_everyword_bot.git $MAINDIR
+
+# Запуск
+
+    MAINDIR=/opt/softdriven/
     setsid bash -c "$MAINDIR/main.sh 2>>$MAINDIR/log >>$MAINDIR/log" & disown -a
